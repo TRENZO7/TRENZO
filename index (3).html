@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRENZO. — Luxury & 3D Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #080808;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow:hover {
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+        #canvas-container {
+            touch-action: none;
+            cursor: grab;
+        }
+        #canvas-container:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body class="bg-[#080808] text-white">
+
+    <!-- Navbar -->
+    <header class="fixed top-0 left-0 w-full z-40 glass px-6 py-4 flex justify-between items-center">
+        <div class="text-xl font-extrabold tracking-[0.25em] uppercase">TRENZO.</div>
+        <nav class="hidden md:flex gap-8 text-xs font-semibold tracking-widest text-gray-400">
+            <a href="#home" class="hover:text-white transition">HOME</a>
+            <a href="#collection" class="hover:text-white transition">COLLECTION</a>
+            <a href="#about" class="hover:text-white transition">CRAFT</a>
+        </nav>
+        <button onclick="toggleCart()" class="glass px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black transition">
+            Bag (<span id="cart-count">0</span>)
+        </button>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20">
+        <span class="text-[11px] uppercase tracking-[0.3em] text-gray-400 mb-4 glass px-4 py-1.5 rounded-full">TRENZO // Interactive 3D Storefront</span>
+        <h1 class="text-5xl md:text-8xl font-black tracking-tighter uppercase mb-6 bg-gradient-to-r from-white via-gray-300 to-gray-600 bg-clip-text text-transparent">
+            Future Wear
+        </h1>
+        <p class="max-w-md text-gray-400 text-sm md:text-base mb-8">
+            Scroll to explore our curated drops. Tap any garment to inspect it on our 360° interactive 3D hanger.
+        </p>
+        <a href="#collection" class="bg-white text-black px-8 py-4 rounded-full font-extrabold uppercase text-xs tracking-widest hover:bg-gray-200 transition">
+            Explore Collection ↓
+        </a>
+    </section>
+
+    <!-- Scrollable Product Grid Section -->
+    <section id="collection" class="py-20 px-6 max-w-7xl mx-auto">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <span class="text-xs uppercase tracking-widest text-gray-500">Catalog // Click for 3D</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold uppercase tracking-tight mt-1">Featured Drops</h2>
+            </div>
+            <span class="text-xs text-gray-400 tracking-wider">Tap item for 360° View</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Product 1 -->
+            <div onclick="open3DModal(0)" class="glass p-5 rounded-3xl glow transition duration-300 group cursor-pointer">
+                <div class="h-80 bg-neutral-900 rounded-2xl mb-5 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1578587018452-892bacefd3f2?auto=format&fit=crop&w=600&q=80" alt="Cyberpunk Hoodie" class="object-cover h-full w-full group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 left-3 glass px-3 py-1 rounded-full text-[10px] uppercase font-bold">Best Seller</span>
+                    <span class="absolute bottom-3 right-3 bg-white text-black px-3 py-1.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow-lg">
+                        ↻ Inspect 3D
+                    </span>
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-bold text-lg uppercase tracking-wide">Cyberpunk Hoodie</h3>
+                        <p class="text-xs text-gray-400 mt-1">450 GSM Heavyweight Cotton</p>
+                    </div>
+                    <span class="font-extrabold text-lg">৳ ২,৫০০</span>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div onclick="open3DModal(1)" class="glass p-5 rounded-3xl glow transition duration-300 group cursor-pointer">
+                <div class="h-80 bg-neutral-900 rounded-2xl mb-5 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=600&q=80" alt="Old Money Polo" class="object-cover h-full w-full group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 left-3 glass px-3 py-1 rounded-full text-[10px] uppercase font-bold">Old Money</span>
+                    <span class="absolute bottom-3 right-3 bg-white text-black px-3 py-1.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow-lg">
+                        ↻ Inspect 3D
+                    </span>
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-bold text-lg uppercase tracking-wide">Old Money Polo</h3>
+                        <p class="text-xs text-gray-400 mt-1">Knitted Breathable Piqué</p>
+                    </div>
+                    <span class="font-extrabold text-lg">৳ ১,৬৫০</span>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div onclick="open3DModal(2)" class="glass p-5 rounded-3xl glow transition duration-300 group cursor-pointer">
+                <div class="h-80 bg-neutral-900 rounded-2xl mb-5 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&w=600&q=80" alt="Linen Overshirt" class="object-cover h-full w-full group-hover:scale-105 transition duration-500">
+                    <span class="absolute top-3 left-3 glass px-3 py-1 rounded-full text-[10px] uppercase font-bold">New Drop</span>
+                    <span class="absolute bottom-3 right-3 bg-white text-black px-3 py-1.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow-lg">
+                        ↻ Inspect 3D
+                    </span>
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-bold text-lg uppercase tracking-wide">Linen Overshirt</h3>
+                        <p class="text-xs text-gray-400 mt-1">100% Pure European Linen</p>
+                    </div>
+                    <span class="font-extrabold text-lg">৳ ১,৯৫০</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 px-6 max-w-4xl mx-auto text-center">
+        <div class="glass p-8 md:p-12 rounded-3xl">
+            <span class="text-[10px] uppercase tracking-[0.3em] text-gray-400">Philosophy</span>
+            <h3 class="text-2xl md:text-3xl font-extrabold uppercase mt-2 mb-4">Tailored Silence</h3>
+            <p class="text-sm text-gray-400 leading-relaxed">
+                Every TRENZO piece is engineered with timeless silhouettes and inspected in 3D before production. Designed for effortless confidence.
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 py-8 text-center text-xs text-gray-500 uppercase tracking-widest">
+        &copy; 2026 TRENZO Studio. All Rights Reserved.
+    </footer>
+
+    <!-- 3D PRODUCT INSPECTOR MODAL (Opens when clicking any product) -->
+    <div id="modal-3d" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex flex-col justify-between p-4 sm:p-6">
+        
+        <!-- Top Modal Header -->
+        <div class="max-w-5xl w-full mx-auto flex justify-between items-start">
+            <div>
+                <span id="m-tag" class="text-[10px] uppercase tracking-[0.25em] text-gray-400 glass px-3 py-1 rounded-full">3D Interactive Hanger</span>
+                <h2 id="m-title" class="text-2xl sm:text-3xl font-extrabold uppercase mt-2">Cyberpunk Hoodie</h2>
+                <p id="m-desc" class="text-xs text-gray-400">450 GSM Heavyweight Cotton</p>
+            </div>
+            <button onclick="close3DModal()" class="glass w-10 h-10 rounded-full flex items-center justify-center text-xl hover:bg-white hover:text-black transition">
+                &times;
+            </button>
+        </div>
+
+        <!-- 3D Stage -->
+        <div class="relative flex-1 max-w-5xl w-full mx-auto my-4 rounded-3xl glass overflow-hidden min-h-[300px]">
+            <div id="canvas-container" class="w-full h-full absolute inset-0"></div>
+            
+            <!-- Hint -->
+            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 glass px-3.5 py-1 rounded-full text-[10px] uppercase tracking-widest text-gray-300 pointer-events-none">
+                ↻ Swipe / Drag to Rotate 360°
+            </div>
+
+            <!-- Color Swatches -->
+            <div class="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2.5 z-10 glass p-2 rounded-full">
+                <button onclick="changeColor('#18181b', 'Matte Black')" class="w-6 h-6 rounded-full bg-[#18181b] border-2 border-white shadow"></button>
+                <button onclick="changeColor('#e5e5e5', 'Off-White')" class="w-6 h-6 rounded-full bg-[#e5e5e5] border border-gray-500 shadow"></button>
+                <button onclick="changeColor('#3f3f46', 'Charcoal')" class="w-6 h-6 rounded-full bg-[#3f3f46] border border-gray-500 shadow"></button>
+                <button onclick="changeColor('#1e293b', 'Midnight Navy')" class="w-6 h-6 rounded-full bg-[#1e293b] border border-gray-500 shadow"></button>
+            </div>
+        </div>
+
+        <!-- Bottom Size & Add to Bag -->
+        <div class="max-w-5xl w-full mx-auto glass p-4 rounded-2xl flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+            <div class="flex items-center justify-between sm:justify-start gap-2">
+                <span class="text-xs uppercase tracking-wider text-gray-400 mr-2">Size:</span>
+                <div class="flex gap-1.5">
+                    <button onclick="selectSize(this, 'S')" class="size-btn px-3 py-1.5 rounded-lg text-xs font-bold glass">S</button>
+                    <button onclick="selectSize(this, 'M')" class="size-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-black">M</button>
+                    <button onclick="selectSize(this, 'L')" class="size-btn px-3 py-1.5 rounded-lg text-xs font-bold glass">L</button>
+                    <button onclick="selectSize(this, 'XL')" class="size-btn px-3 py-1.5 rounded-lg text-xs font-bold glass">XL</button>
+                </div>
+            </div>
+            <button onclick="addToBag()" class="bg-white text-black px-8 py-3.5 rounded-xl font-extrabold text-xs uppercase tracking-widest hover:bg-gray-200 transition">
+                Add to Bag — <span id="m-price">৳ ২,৫০০</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- CART MODAL -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass bg-[#111] w-full max-w-md rounded-3xl p-6 border border-white/15">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="font-extrabold uppercase tracking-wider text-lg">Your Bag</h2>
+                <button onclick="toggleCart()" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <div id="cart-items" class="space-y-3 max-h-60 overflow-y-auto text-sm text-gray-300 mb-6">
+                <p class="text-gray-500 text-xs">Your bag is currently empty.</p>
+            </div>
+            <button onclick="orderWhatsApp()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-widest transition">
+                Order via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            { name: "Cyberpunk Hoodie", price: "৳ ২,৫০০", desc: "450 GSM Heavyweight Cotton • Matte Finish", tag: "Drop 01 // 3D View", type: "hoodie", color: "#18181b", colorName: "Matte Black" },
+            { name: "Old Money Polo", price: "৳ ১,৬৫০", desc: "Knitted Breathable Piqué • Classic Fit", tag: "Drop 02 // 3D View", type: "polo", color: "#e5e5e5", colorName: "Off-White" },
+            { name: "Linen Overshirt", price: "৳ ১,৯৫০", desc: "100% Pure European Linen • Relaxed Cut", tag: "Drop 03 // 3D View", type: "shirt", color: "#3f3f46", colorName: "Charcoal" }
+        ];
+
+        let currentProduct = 0;
+        let selectedSize = 'M';
+        let selectedColorName = 'Matte Black';
+        let cart = [];
+        let sceneInitialized = false;
+        let scene, camera, renderer, hangerGroup, clothMat, leftSleeve, rightSleeve, collar;
+        let isDragging = false, prevX = 0, targetRotationY = 0;
+
+        function init3D() {
+            if (sceneInitialized) return;
+            const container = document.getElementById('canvas-container');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+            camera.position.set(0, 0.2, 5.2);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.2);
+            dirLight1.position.set(5, 8, 5);
+            scene.add(dirLight1);
+
+            const dirLight2 = new THREE.DirectionalLight(0x88aaff, 0.5);
+            dirLight2.position.set(-5, -2, -5);
+            scene.add(dirLight2);
+
+            hangerGroup = new THREE.Group();
+            scene.add(hangerGroup);
+
+            const metalMat = new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.9, roughness: 0.2 });
+            const rail = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 8, 16).rotateZ(Math.PI / 2), metalMat);
+            rail.position.y = 1.65;
+            scene.add(rail);
+
+            const hook = new THREE.Mesh(new THREE.TorusGeometry(0.14, 0.022, 12, 32, Math.PI * 1.3), metalMat);
+            hook.position.set(0, 1.5, 0);
+            hangerGroup.add(hook);
+
+            const bar = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 1.5, 16).rotateZ(Math.PI / 2), metalMat);
+            bar.position.set(0, 1.25, 0);
+            hangerGroup.add(bar);
+
+            clothMat = new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.75, metalness: 0.05 });
+
+            const torsoGeo = new THREE.CylinderGeometry(0.68, 0.74, 1.75, 32);
+            torsoGeo.scale(1, 1, 0.42);
+            const torso = new THREE.Mesh(torsoGeo, clothMat);
+            torso.position.y = 0.32;
+            hangerGroup.add(torso);
+
+            const sleeveGeo = new THREE.CylinderGeometry(0.22, 0.17, 1.25, 24);
+            leftSleeve = new THREE.Mesh(sleeveGeo, clothMat);
+            leftSleeve.position.set(-0.88, 0.55, 0);
+            leftSleeve.rotation.z = -0.35;
+            hangerGroup.add(leftSleeve);
+
+            rightSleeve = new THREE.Mesh(sleeveGeo, clothMat);
+            rightSleeve.position.set(0.88, 0.55, 0);
+            rightSleeve.rotation.z = 0.35;
+            hangerGroup.add(rightSleeve);
+
+            const collarGeo = new THREE.TorusGeometry(0.28, 0.12, 16, 32);
+            collarGeo.rotateX(Math.PI / 2.3);
+            collar = new THREE.Mesh(collarGeo, clothMat);
+            collar.position.set(0, 1.22, 0.02);
+            hangerGroup.add(collar);
+
+            const chestTag = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.09, 0.04), new THREE.MeshStandardMaterial({ color: 0xffffff }));
+            chestTag.position.set(0.26, 0.75, 0.31);
+            hangerGroup.add(chestTag);
+
+            container.addEventListener('pointerdown', (e) => { isDragging = true; prevX = e.clientX; });
+            window.addEventListener('pointerup', () => isDragging = false);
+            window.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+                targetRotationY += (e.clientX - prevX) * 0.012;
+                prevX = e.clientX;
+            });
+
+            window.addEventListener('resize', resize3D);
+
+            const clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+                hangerGroup.rotation.z = Math.sin(clock.getElapsedTime() * 1.5) * 0.02;
+                if (!isDragging) targetRotationY += 0.004;
+                hangerGroup.rotation.y += (targetRotationY - hangerGroup.rotation.y) * 0.1;
+                renderer.render(scene, camera);
+            }
+            animate();
+            sceneInitialized = true;
+        }
+
+        function resize3D() {
+            if (!renderer) return;
+            const container = document.getElementById('canvas-container');
+            if (container.clientWidth === 0) return;
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        function open3DModal(idx) {
+            currentProduct = idx;
+            const p = products[idx];
+            document.getElementById('m-title').innerText = p.name;
+            document.getElementById('m-price').innerText = p.price;
+            document.getElementById('m-desc').innerText = p.desc;
+            document.getElementById('m-tag').innerText = p.tag;
+            selectedColorName = p.colorName;
+
+            document.getElementById('modal-3d').classList.remove('hidden');
+            init3D();
+            setTimeout(() => {
+                resize3D();
+                if (p.type === 'polo') {
+                    leftSleeve.scale.set(1, 0.55, 1);
+                    rightSleeve.scale.set(1, 0.55, 1);
+                    leftSleeve.position.set(-0.78, 0.85, 0);
+                    rightSleeve.position.set(0.78, 0.85, 0);
+                    collar.scale.set(1, 1, 0.7);
+                } else if (p.type === 'shirt') {
+                    leftSleeve.scale.set(0.95, 0.95, 0.95);
+                    rightSleeve.scale.set(0.95, 0.95, 0.95);
+                    leftSleeve.position.set(-0.88, 0.55, 0);
+                    rightSleeve.position.set(0.88, 0.55, 0);
+                    collar.scale.set(1.05, 1.05, 0.8);
+                } else {
+                    leftSleeve.scale.set(1.1, 1.05, 1.1);
+                    rightSleeve.scale.set(1.1, 1.05, 1.1);
+                    leftSleeve.position.set(-0.88, 0.55, 0);
+                    rightSleeve.position.set(0.88, 0.55, 0);
+                    collar.scale.set(1.25, 1.25, 1.4);
+                }
+                clothMat.color.set(p.color);
+                targetRotationY += Math.PI * 2;
+            }, 50);
+        }
+
+        function close3DModal() {
+            document.getElementById('modal-3d').classList.add('hidden');
+        }
+
+        function changeColor(hex, name) {
+            if (clothMat) clothMat.color.set(hex);
+            selectedColorName = name;
+        }
+
+        function selectSize(btn, size) {
+            selectedSize = size;
+            document.querySelectorAll('.size-btn').forEach(b => b.className = 'size-btn px-3 py-1.5 rounded-lg text-xs font-bold glass');
+            btn.className = 'size-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-black';
+        }
+
+        function addToBag() {
+            const p = products[currentProduct];
+            cart.push({ name: p.name, price: p.price, size: selectedSize, color: selectedColorName });
+            document.getElementById('cart-count').innerText = cart.length;
+            updateCartUI();
+            close3DModal();
+            toggleCart();
+        }
+
+        function updateCartUI() {
+            const box = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                box.innerHTML = '<p class="text-gray-500 text-xs">Your bag is currently empty.</p>';
+                return;
+            }
+            box.innerHTML = cart.map(item => `
+                <div class="flex justify-between items-center glass p-3 rounded-xl">
+                    <div>
+                        <div class="font-bold text-white text-xs">${item.name}</div>
+                        <div class="text-[10px] text-gray-400">Size: ${item.size} • ${item.color}</div>
+                    </div>
+                    <div class="font-bold text-xs">${item.price}</div>
+                </div>
+            `).join('');
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-modal').classList.toggle('hidden');
+        }
+
+        function orderWhatsApp() {
+            if (cart.length === 0) return alert('Add an item first!');
+            const text = cart.map(c => `${c.name} (${c.size}, ${c.color}) - ${c.price}`).join('%0A');
+            window.open(`https://wa.me/?text=New%20TRENZO%20Order:%0A${text}`, '_blank');
+        }
+    </script>
+</body>
+</html>
